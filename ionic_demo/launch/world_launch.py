@@ -15,12 +15,17 @@
 from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
-from ros_gz_sim.actions import GzServer
+from ros_gz_sim.actions import GzServer, GzClient
 
 from launch import LaunchDescription
 
 
+
 def generate_launch_description():
-    ionic_demo_dir = Path(get_package_share_directory("ionic_demo"))
-    world = str(ionic_demo_dir / "worlds" / "ionic.sdf")
-    return LaunchDescription([GzServer(world_sdf_file=world, use_composition='True')])
+    pkg_path = Path(get_package_share_directory('ionic_demo'))
+    world = pkg_path / 'worlds' / 'ionic.sdf'
+
+    return LaunchDescription([
+        GzServer(world_sdf_file=str(world), verbose='4', output='screen'),
+        GzClient(),  # GUI
+    ])
